@@ -26,12 +26,12 @@ def saveAll(req):
 
     for member in allMember:
         # memberID = req.POST.get(member.Member_ID,'')
-        lordsTable = req.POST.get(str(member.Member_ID)+'LT', '')
-        prayerMeeting = req.POST.get(str(member.Member_ID)+'PM', '')
-        morningRevival = req.POST.get(str(member.Member_ID)+'LT', '')
-        bibleReading = req.POST.get(str(member.Member_ID)+'BR', '')
-        smallGroup = req.POST.get(str(member.Member_ID)+'SG', '')
-        childrenNum = req.POST.get(str('childrenNum'), '')
+        lordsTable = req.POST.get(str(member.Member_ID)+'LT', False)
+        prayerMeeting = req.POST.get(str(member.Member_ID)+'PM', False)
+        morningRevival = req.POST.get(str(member.Member_ID)+'LT', False)
+        bibleReading = req.POST.get(str(member.Member_ID)+'BR', False)
+        smallGroup = req.POST.get(str(member.Member_ID)+'SG', False)
+        childrenNum = req.POST.get(str('childrenNum'), False)
         history = AttendanceHistory(Member_ID=member,
                                     Lords_Table=lordsTable,
                                     Prayer_Meeting=prayerMeeting,

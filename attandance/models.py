@@ -9,7 +9,9 @@ MemberType = (
     ('2', 'Pre-Youth'),
     ('3', 'Campus'),
     ('4', 'Young-Working'),
-    ('5', 'Full-time')
+    ('5', 'Community'),
+    ('6', 'Full-time')
+
 )
 
 
@@ -42,23 +44,23 @@ class AttendanceHistory(models.Model):
         return "{0}".format(self.History_ID)
 
 
-class AccountManager(BaseUserManager):
-
-    def create_user(self,email,password=None,**kwargs):
-        if not email:
-            raise ValueError('Users must have a valid email address')
-
-        if not kwargs.get('userName'):
-            raise ValueError('Users must have a valid name')
-
-        account = self.model(
-            email=self.normalize_email(email),userName=kwargs.get('userName')
-        )
-
-        account.set_password(password)
-        account.save()
-
-        return account
+# class AccountManager(BaseUserManager):
+#
+#     def create_user(self,email,password=None,**kwargs):
+#         if not email:
+#             raise ValueError('Users must have a valid email address')
+#
+#         if not kwargs.get('userName'):
+#             raise ValueError('Users must have a valid name')
+#
+#         account = self.model(
+#             email=self.normalize_email(email),userName=kwargs.get('userName')
+#         )
+#
+#         account.set_password(password)
+#         account.save()
+#
+#         return account
 #
 #     def create_superuser(self,email,password,**kwargs):
 #         account = self.model(

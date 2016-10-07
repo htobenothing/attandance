@@ -14,12 +14,12 @@
 
         <table class="table table-striped table-sm">
             <thead class="thead-inverse">
-                <th>Name</th>
-                <th>Lords Table</th>
-                <th>Morning Revival</th>
-                <th>Prayer Meeting</th>
-                <th>Bible Reading</th>
-                <th>Small Group Meeting</th>
+                <th>Name 姓名</th>
+                <th>Lords Table 主日</th>
+                <th>Morning Revival 晨兴</th>
+                <th>Prayer Meeting 祷告聚会</th>
+                <th>Bible Reading 读经</th>
+                <th>Small Group Meeting 小排</th>
             </thead>
         {% for member in allMember %}
             <tr>
@@ -42,18 +42,23 @@
                     <input type="checkbox" NAME="{{ member.Member_ID}}SG" id="{{ member.Member_ID}}SG">
                 </td>
                 <td>
-                    {% buttons %}
-                        <button type="button" class="btn btn-primary">
-                        {% bootstrap_icon "star" %} Confirm
-                        </button>
-                        <button type="button" class="btn btn-primary">
-                        {% bootstrap_icon "star" %} Edit
-                        </button>
-                    {% endbuttons %}
+{#                    {% buttons %}#}
+{#                        <button type="button" class="btn btn-primary">#}
+{#                        Confirm#}
+{#                        </button>#}
+{#                        <button type="button" class="btn btn-primary">#}
+{#                         Edit#}
+{#                        </button>#}
+{#                    {% endbuttons %}#}
 
                 </td>
             </tr>
         {% endfor %}
+        <tr>
+            <td>Children <input type="text" name="childrenNum" placeholder="Children Number"
+                                required="required"></td>
+
+        </tr>
         </table>
     <button type="submit">Submit</button>
     </form>

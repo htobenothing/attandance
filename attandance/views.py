@@ -1,18 +1,16 @@
 from django.shortcuts import render
 from datetime import datetime,timedelta
-import logging
 from collections import defaultdict
 
-from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.contrib.auth.models import User,Group
 
 from rest_framework import viewsets
-from rest_framework.parsers import JSONParser
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.views import APIView
 
 from attandance.serializers import UserSerialzer,GroupSersialzer,MemberSerializer
 from attandance.models import Member,AttendanceHistory
@@ -123,21 +121,20 @@ class GroupViewset(viewsets.ModelViewSet):
 
 
 
-@api_view(['GET','POST'])
+# @api_view(['GET','POST'])
 @csrf_exempt
-def Member_List(req,format=None):
+class MemberList(APIView):
     """
     lsit out all members, or create new member
     :param request:
     :return:
     """
-
-    if req.method == 'GET':
+    def get(self, req, format=None):
         members = Member.objects.all()
         serializer = MemberSerializer(members,many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
-    elif req.method == 'POST':
+    def post(self,req, format=None):
         serializer = MemberSerializer(data=req.data)
         print(req.data)
         if serializer.is_valid():
@@ -145,27 +142,28 @@ def Member_List(req,format=None):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['GET','PUT'])
+# @api_view(['GET','PUT'])
 @csrf_exempt
-def Member_Detail(req,pk,format=None):
+class MemberDetail(APIView):
     """
     Retieve, update a member
-    :param req:HttpRequest
-    :param pk: the primary key of Member
-    :return:
     """
-    try:
-        member = Member.objects.get(pk=pk)
-    except Member.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+    def get_object(self,pk):
+        try:
+            member = Member.objects.get(pk=pk)
+        except Member.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if req.method == 'GET':
+    def get(self,req,pk,format=None):
+        member = self.get_object(pk)
         serializer = MemberSerializer(member)
         return Response(serializer.data,status=status.HTTP_200_OK)
-    elif req.method == 'PUT':
+
+    def put(self,req,pk,format=None):
+        member = self.get_object(pk)
         serializer = MemberSerializer(member,req.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data)
+            return Response(serializer.data,status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

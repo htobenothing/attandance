@@ -20,7 +20,6 @@ class Member(models.Model):
     Name = models.CharField(max_length=50)
     Member_Type = models.CharField(max_length=1, choices=MemberType)
     Contact = models.CharField(max_length=50)
-    Password = models.CharField(max_length=255)
     Create_Date = models.DateTimeField(auto_now_add=True)
     Status = models.BooleanField(default=True)
 
@@ -42,6 +41,7 @@ class AttendanceHistory(models.Model):
 
     def __str__(self):
         return "{0}".format(self.History_ID)
+
 
 
 # class AccountManager(BaseUserManager):

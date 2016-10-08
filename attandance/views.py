@@ -1,13 +1,23 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
-from django.views import generic
 from datetime import datetime,timedelta
-# Create your views here.
-from .models import Member,AttendanceHistory
-from django.core.mail import send_mail
-from django.conf import settings
+import logging
 from collections import defaultdict
 
+from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import send_mail
+from django.contrib.auth.models import User,Group
+
+from rest_framework import viewsets
+from rest_framework.parsers import JSONParser
+from rest_framework.response import Response
+from rest_framework import status
+from rest_framework.decorators import api_view
+
+from attandance.serializers import UserSerialzer,GroupSersialzer,MemberSerializer
+from attandance.models import Member,AttendanceHistory
+
+# Create your views here.
 
 def create(req):
     allMember = Member.objects.all()
@@ -81,6 +91,81 @@ def sendEmailToChurchOffice(childrenNum):
                    Summary['Morning_Revival'],Summary['Bible_Reading'],
                    Summary['Small_Group'],Summary['Children']),
         'htobenothingtest@gmail.com',
-        ['htobenothing@gmail.com'],
+        ['htobenothingtest@gmail.com'],
         fail_silently=False
     )
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint allow users to be view and edited
+    """
+    queryset = User.objects.all()
+    serializer_class = UserSerialzer
+
+
+class GroupViewset(viewsets.ModelViewSet):
+    """
+    API endpoint allow groups to be view and edited
+    """
+    queryset = Group.objects.all()
+    serializer_class = GroupSersialzer
+
+# use @api_view of APIView to replace the JSONResponse
+# class JSONResponse(HttpResponse):
+#     """
+#     An HttpResponse that renders content into Json
+#     """
+#     def __init__(self, data, **kwargs):
+#         content = JSONRenderer().render(data)
+#         kwargs['content_type'] = 'application/json'
+#         super(JSONResponse,self).__init__(content, **kwargs)
+
+
+
+@api_view(['GET','POST'])
+@csrf_exempt
+def Member_List(req,format=None):
+    """
+    lsit out all members, or create new member
+    :param request:
+    :return:
+    """
+
+    if req.method == 'GET':
+        members = Member.objects.all()
+        serializer = MemberSerializer(members,many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    elif req.method == 'POST':
+        serializer = MemberSerializer(data=req.data)
+        print(req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET','PUT'])
+@csrf_exempt
+def Member_Detail(req,pk,format=None):
+    """
+    Retieve, update a member
+    :param req:HttpRequest
+    :param pk: the primary key of Member
+    :return:
+    """
+    try:
+        member = Member.objects.get(pk=pk)
+    except Member.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if req.method == 'GET':
+        serializer = MemberSerializer(member)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    elif req.method == 'PUT':
+        serializer = MemberSerializer(member,req.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+

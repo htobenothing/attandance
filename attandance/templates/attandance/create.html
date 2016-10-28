@@ -1,15 +1,17 @@
 {# Load the tag library #}
 {% load bootstrap3 %}
-<link href="../../static/attandance/style.css" type="text/css" rel="stylesheet">
+{% load static %}
+<link href="{% static 'attandance/style.css' %}" type="text/css" rel="stylesheet">
+<script src="{% static 'js/atten.js' %}"></script>
+<script src="{% static 'js/jquery-3.1.0.min.js' %}"></script>
 {# Load CSS and JavaScript #}
 {% bootstrap_css %}
 {% bootstrap_javascript %}
 
 {# Display django.contrib.messages as Bootstrap alerts #}
 {% bootstrap_messages %}
-
 {% if allMember %}
-    <form action="{% url 'saveall' %}" method="post">
+    <form action="{% url 'attan:saveall' %}" method="post">
     {% csrf_token %}
         <div class=""></div>
         <table class="table table-striped table-sm">
@@ -27,35 +29,34 @@
                     {{ member.Name }}
                 </td>
                 <td>
-                    <input type="checkbox" name="{{ member.Member_ID}}LT" id="{{ member.Member_ID}}+LT">
+                    <input type="checkbox" name="{{ member.Member_ID}}LT" id="{{ member.Member_ID}}+LT" class="{{ member.Member_ID }}">
                 </td>
                 <td>
-                    <input type="checkbox" name="{{ member.Member_ID}}MR" id="{{ member.Member_ID}}MR">
+                    <input type="checkbox" name="{{ member.Member_ID}}MR" id="{{ member.Member_ID}}MR" class="{{ member.Member_ID }}">
                 </td>
                 <td>
-                    <input type="checkbox" name="{{ member.Member_ID}}PM" id="{{ member.Member_ID}}PM">
+                    <input type="checkbox" name="{{ member.Member_ID}}PM" id="{{ member.Member_ID}}PM" class="{{ member.Member_ID }}">
                 </td>
                 <td>
-                    <input type="checkbox" name="{{ member.Member_ID}}BR" id="{{ member.Member_ID}}BR">
+                    <input type="checkbox" name="{{ member.Member_ID}}BR" id="{{ member.Member_ID}}BR" class="{{ member.Member_ID }}">
                 </td>
                 <td>
-                    <input type="checkbox" NAME="{{ member.Member_ID}}SG" id="{{ member.Member_ID}}SG">
+                    <input type="checkbox" NAME="{{ member.Member_ID}}SG" id="{{ member.Member_ID}}SG" class="{{ member.Member_ID }}">
                 </td>
                 <td>
-{#                    {% buttons %}#}
-{#                        <button type="button" class="btn btn-primary">#}
-{#                        Confirm#}
-{#                        </button>#}
-{#                        <button type="button" class="btn btn-primary">#}
-{#                         Edit#}
-{#                        </button>#}
-{#                    {% endbuttons %}#}
-
+                    {% buttons %}
+                        <button type="button" class="btn btn-primary" id="{{ member.Member_ID }}_confirm" onclick="confirmOwnAtten(this.id)">
+                        Confirm
+                        </button>
+                        <button type="button" class="btn btn-primary" id="{{ member.Member_ID }}_edit" onclick="editAtten(this.id)">
+                         Edit
+                        </button>
+                    {% endbuttons %}
                 </td>
             </tr>
         {% endfor %}
         <tr>
-            <td>Children <input type="text" name="childrenNum" placeholder="Children Number"
+            <td colspan="6">Children <input type="text" name="childrenNum" placeholder="Children Number"
                                 required="required"></td>
 
         </tr>

@@ -2,6 +2,6 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import Member,AttendanceHistory
+from .models import Member,AttendanceHistory,District
 
-admin.site.register([Member,AttendanceHistory])
+admin.site.register([Member,AttendanceHistory,District])

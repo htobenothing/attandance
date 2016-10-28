@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
-
+from .SocialApi import Google_CLIENT_ID,Google_CLIENT_SECRET,FACEBOOK_CLIENT_ID,FACEBOOK_CLIENT_SECRET
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -39,9 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'attandance.apps.AttandanceConfig',
     'bootstrap3',
-    'rest_framework'
+    'rest_framework',
+    'oauth2_provider',
+    'social.apps.django_app.default',
+    'rest_framework_social_oauth2',
 
 ]
+CORS_ORIGIN_ALLOW_ALL = True
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
@@ -51,8 +55,35 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.IsAdminUser',
 
     ],
+    # 'DEFAULT_AUTHENTICATION_CLASSES':[
+    #     'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+    #     'rest_framework_social_oauth2.authentication.SocialAuthentication',
+    # ],
     'PAGE_SIZE':10
 }
+# AUTHENTICATION_BACKENDS = (
+#
+#     # google Oauth2
+#     'social.backends.google.GoogleOAuth2',
+#
+#     # facebook Oauth2
+#     'social.backends.facebook.Facebook2AppOAuth2',
+#     'social.backends.facebook.Facebook2OAuth2',
+#
+#     # rest framework
+#     'rest_framework_social_oauth2.backends.DjangoOAuth2',
+#
+#     # Django
+#     'django.contrib.auth.backends.ModelBackend'
+# )
+
+GOOGLE_OAUTH2_CLIENT_ID = Google_CLIENT_ID
+GOOGLE_OAUTH2_CLIENT_SECRET = Google_CLIENT_SECRET
+GOOGLE_OAUTH_EXTRA_SCOPE =['email']
+
+FACEBOOK_APP_ID = FACEBOOK_CLIENT_ID
+FACEBOOK_API_SECRET = FACEBOOK_CLIENT_SECRET
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -63,6 +94,7 @@ MIDDLEWARE_CLASSES = [
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 # Default settings
@@ -125,7 +157,9 @@ BOOTSTRAP3 = {
         'inline': 'bootstrap3.renderers.InlineFieldRenderer',
     },
 }
-ROOT_URLCONF = 'DjangoDemo.urls'
+ROOT_URLCONF = 'cogsg.urls'
+
+
 
 TEMPLATES = [
     {
@@ -139,12 +173,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'DjangoDemo.wsgi.application'
+WSGI_APPLICATION = 'cogsg.wsgi.application'
 
 
 # Database
@@ -200,3 +236,6 @@ EMAIL_HOST_PASSWORD = 'totime1@'
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
 STATIC_URL = '/static/'
+
+LOGIN_REDIRECT_URL= "/attandance/create/"
+AUTH_USER_MODEL = 'attandance.Account'

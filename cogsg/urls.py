@@ -1,4 +1,4 @@
-"""DjangoDemo URL Configuration
+"""cogsg URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.9/topics/http/urls/
@@ -17,18 +17,25 @@ from django.conf.urls import url,include
 from django.contrib import admin
 from django.contrib.auth.models import User
 from rest_framework import routers, serializers, viewsets
+
 from attandance import views
 
 
-router = routers.DefaultRouter()
-router.register(r'users',views.UserViewSet)
+router = routers.SimpleRouter()
+# router.register(r'users',views.UserViewSet)
+router.register(r'accounts',views.AccountViewSet)
 router.register(r'groups',views.GroupViewset)
+router.register(r'members',views.MemberViewSet)
 
 urlpatterns = [
-
-    url(r'^attandance/', include('attandance.urls')),
+    url(r'^attandance/', include('attandance.urls',namespace='attan')),
     url(r'^admin/', admin.site.urls),
-    url(r'^',include(router.urls)),
-    url(r'^api/',include('rest_framework.urls'))
-
+    url(r'^api/v1/',include(router.urls)),
+    url(r'^$', views.IndexView.as_view(), name='index'),
+    # url(r'^auth/',include('rest_framework_social_oauth2.urls'))
 ]
+
+urlpatterns +=[
+    url('^api/v1/',include('rest_framework.urls')),
+]
+

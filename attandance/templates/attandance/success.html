@@ -1,10 +1,8 @@
 {% extends 'attandance/base.html' %}
-{% load bootstrap3 %}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
+
+
 {% block content %}
     Submit Successful
-    {% buttons %}
         {% csrf_token %}
         <form action="/attandance/sendEmail/">
             <input type="text" placeholder="the Children Number" name="ChilrenNum">
@@ -13,5 +11,4 @@
             </button>
         </form>
 
-    {% endbuttons %}
 {% endblock %}

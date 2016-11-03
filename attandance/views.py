@@ -33,24 +33,28 @@ def detail(req, member_id):
     return render(req, "attandance/detail", data)
 
 
+
 def saveAll(req):
     allMember = Member.objects.all()
 
     for member in allMember:
         # memberID = req.POST.get(member.Member_ID,'')
-        lordsTable = req.POST.get(str(member.Member_ID) + 'LT', False)
-        prayerMeeting = req.POST.get(str(member.Member_ID) + 'PM', False)
-        morningRevival = req.POST.get(str(member.Member_ID) + 'LT', False)
-        bibleReading = req.POST.get(str(member.Member_ID) + 'BR', False)
-        smallGroup = req.POST.get(str(member.Member_ID) + 'SG', False)
-        childrenNum = req.POST.get(str('childrenNum'), False)
-        history = AttendanceHistory(Member_ID=member,
-                                    Lords_Table=lordsTable,
-                                    Prayer_Meeting=prayerMeeting,
-                                    Morning_Revival=morningRevival,
-                                    Bible_Reading=bibleReading,
-                                    Small_Group=smallGroup)
-        history.save()
+
+        lordsTable = req.POST.get(str(member.Member_ID) + 'LT')
+        print(lordsTable)
+        if lordsTable:
+            prayerMeeting = req.POST.get(str(member.Member_ID) + 'PM',False)
+            morningRevival = req.POST.get(str(member.Member_ID) + 'LT',False)
+            bibleReading = req.POST.get(str(member.Member_ID) + 'BR',False)
+            smallGroup = req.POST.get(str(member.Member_ID) + 'SG',False)
+
+            history = AttendanceHistory(Member_ID=member,
+                                        Lords_Table=lordsTable,
+                                        Prayer_Meeting=prayerMeeting,
+                                        Morning_Revival=morningRevival,
+                                        Bible_Reading=bibleReading,
+                                        Small_Group=smallGroup)
+            history.save()
     # sendEmailToChurchOffice(childrenNum)
 
     return render(req, "attandance/success.html", {"status": "success"})
@@ -130,7 +134,7 @@ class MemberViewSet(viewsets.ModelViewSet):
     queryset = Member.objects.all()
 
 
-class AttandanceHistory(viewsets.ModelViewSet):
+class AttandanceHistoryViewSet(viewsets.ModelViewSet):
     serializer_class = AttandanceHistorySerializer
     queryset = AttendanceHistory.objects.all()
 

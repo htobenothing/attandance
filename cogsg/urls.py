@@ -26,6 +26,7 @@ router = routers.SimpleRouter()
 router.register(r'accounts',views.AccountViewSet)
 router.register(r'groups',views.GroupViewset)
 router.register(r'members',views.MemberViewSet)
+router.register(r'attandancehistory',views.AttandanceHistoryViewSet)
 
 urlpatterns = [
     url(r'^attandance/', include('attandance.urls',namespace='attan')),
@@ -33,9 +34,8 @@ urlpatterns = [
     url(r'^api/v1/',include(router.urls)),
     url(r'^$', views.IndexView.as_view(), name='index'),
     # url(r'^auth/',include('rest_framework_social_oauth2.urls'))
+    url(r'^api/',include('rest_framework.urls'))
 ]
 
-urlpatterns +=[
-    url('^api/v1/',include('rest_framework.urls')),
-]
+
 

@@ -1,68 +1,70 @@
-{# Load the tag library #}
-{% load bootstrap3 %}
+{% extends 'attandance/sidebar.html' %}
 {% load static %}
-<link href="{% static 'attandance/style.css' %}" type="text/css" rel="stylesheet">
-<script src="{% static 'js/atten.js' %}"></script>
-<script src="{% static 'js/jquery-3.1.0.min.js' %}"></script>
-{# Load CSS and JavaScript #}
-{% bootstrap_css %}
-{% bootstrap_javascript %}
 
-{# Display django.contrib.messages as Bootstrap alerts #}
-{% bootstrap_messages %}
-{% if allMember %}
-    <form action="{% url 'attan:saveall' %}" method="post">
-    {% csrf_token %}
-        <div class=""></div>
-        <table class="table table-striped table-sm">
-            <thead class="thead-inverse">
+{% block childCss %}
+    <link href="{% static 'attandance/style.css' %}" type="text/css" rel="stylesheet">
+{% endblock %}
+{% block childJS %}
+    <script src="{% static 'attandance/js/atten.js' %}"></script>
+
+{% endblock %}
+
+
+
+{% block loginContent %}
+    {% if allMember %}
+        <form  method="post">
+            {% csrf_token %}
+            <div class=""></div>
+            <table class="table table-striped ">
+                <thead class="thead-inverse">
                 <th>Name(姓名)</th>
                 <th>Lords Table(主日)</th>
                 <th>Morning Revival(晨兴)</th>
                 <th>Prayer Meeting (祷告聚会)</th>
                 <th>Bible Reading(读经)</th>
                 <th>Small Group Meeting(小排)</th>
-            </thead>
-        {% for member in allMember %}
-            <tr>
-                <td>
-                    {{ member.Name }}
-                </td>
-                <td>
-                    <input type="checkbox" name="{{ member.Member_ID}}LT" id="{{ member.Member_ID}}+LT" class="{{ member.Member_ID }}">
-                </td>
-                <td>
-                    <input type="checkbox" name="{{ member.Member_ID}}MR" id="{{ member.Member_ID}}MR" class="{{ member.Member_ID }}">
-                </td>
-                <td>
-                    <input type="checkbox" name="{{ member.Member_ID}}PM" id="{{ member.Member_ID}}PM" class="{{ member.Member_ID }}">
-                </td>
-                <td>
-                    <input type="checkbox" name="{{ member.Member_ID}}BR" id="{{ member.Member_ID}}BR" class="{{ member.Member_ID }}">
-                </td>
-                <td>
-                    <input type="checkbox" NAME="{{ member.Member_ID}}SG" id="{{ member.Member_ID}}SG" class="{{ member.Member_ID }}">
-                </td>
-                <td>
-                    {% buttons %}
-                        <button type="button" class="btn btn-primary" id="{{ member.Member_ID }}_confirm" onclick="confirmOwnAtten(this.id)">
-                        Confirm
-                        </button>
-                        <button type="button" class="btn btn-primary" id="{{ member.Member_ID }}_edit" onclick="editAtten(this.id)">
-                         Edit
-                        </button>
-                    {% endbuttons %}
-                </td>
-            </tr>
-        {% endfor %}
-        <tr>
-            <td colspan="6">Children <input type="text" name="childrenNum" placeholder="Children Number"
-                                required="required"></td>
+                </thead>
+                {% for member in allMember %}
+                    <tr class="{{ member.Member_ID }}">
+                        <td>
+                            {{ member.Name }}
+                        </td>
+                        <td>
+                            <input type="checkbox" id="{{ member.Member_ID }}LT" class="{{ member.Member_ID }}">
+                        </td>
+                        <td>
+                            <input type="checkbox" id="{{ member.Member_ID }}MR" class="{{ member.Member_ID }}">
+                        </td>
+                        <td>
+                            <input type="checkbox" id="{{ member.Member_ID }}PM" class="{{ member.Member_ID }}">
+                        </td>
+                        <td>
+                            <input type="checkbox" id="{{ member.Member_ID }}BR" class="{{ member.Member_ID }}">
+                        </td>
+                        <td>
+                            <input type="checkbox" id="{{ member.Member_ID }}SG" class="{{ member.Member_ID }}">
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-primary" id="{{ member.Member_ID }}_confirm"
+                                    onclick="confirmOwnAtten(this.id)">
+                                Confirm
+                            </button>
+                            <button type="button" class="btn btn-primary" id="{{ member.Member_ID }}_edit"
+                                    onclick="editAtten(this.id)">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="6">Children <input type="text" name="childrenNum" placeholder="Children Number"
+                                                    required="required"></td>
 
-        </tr>
-        </table>
-    <button type="submit">Submit</button>
-    </form>
+                </tr>
+            </table>
+            <button type="submit">Submit</button>
+        </form>
 
-{% endif %}
-
+    {% endif %}
+{% endblock %}

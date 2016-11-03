@@ -3,19 +3,24 @@ from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 # Create your models here.
 from .data import MemberType,Zone
-
+from datetime import datetime
 
 class District(models.Model):
     District_ID = models.AutoField(primary_key=True)
     Zone = models.CharField(max_length=3, choices=Zone)
-    District_Name = models.CharField(max_length=50,default='')
+    District_Name = models.CharField(max_length=50)
     Create_Date = models.DateTimeField()
+    update_at = models.DateTimeField(auto_now_add=True)
     Address = models.CharField(max_length=120)
-    PostCode = models.CharField(max_length=20,default='')
+    PostCode = models.CharField(max_length=20)
     Status = models.BooleanField(default=True)
+
+    def __str__(self):
+        return "Zone {0}-{1}".format(self.Zone,self.District_Name)
 
 
 class Member(models.Model):
+
     Member_ID = models.AutoField(primary_key=True)
     Name = models.CharField(max_length=50)
     Given_Name = models.CharField(max_length=50, blank=True)
@@ -28,9 +33,12 @@ class Member(models.Model):
     Create_Date = models.DateTimeField(auto_now_add=True)
     Status = models.BooleanField(default=True)
 
-    def __str__(self):
+
+    def __unicode__(self):
         return "{0}:{1}".format(self.Member_ID, self.Name)
 
+    def __str__(self):
+        return "{0}:{1}".format(self.Member_ID, self.Name)
 
 class AttendanceHistory(models.Model):
     History_ID = models.AutoField(primary_key=True)

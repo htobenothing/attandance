@@ -17,7 +17,9 @@ class MemberSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Member
-        fields = ('Member_ID', 'Name', 'Member_Type','District_ID','Email', 'Phone', 'Status', 'AttandanceHistorys')
+        fields = ('Member_ID', 'Name', 'Member_Type',
+                  'District_ID','Email', 'Phone', 'Status',
+                  'AttandanceHistorys',"Create_Date")
 
     def create(self,validatedData):
         """
@@ -38,7 +40,8 @@ class MemberSerializer(serializers.ModelSerializer):
         instance.Member_ID = validated_data.get('Member_ID',instance.Member_ID)
         instance.Name = validated_data.get('Name',instance.Name)
         instance.Member_Type = validated_data.get('Member_Type',instance.Member_Type)
-        instance.Contact = validated_data.get('Contact',instance.Contact)
+        instance.Email = validated_data.get('Email',instance.Email)
+        instance.Phone = validated_data.get('Phone',instance.Phone)
         instance.Status = validated_data.get('Status',instance.Status)
         instance.save()
         return instance
@@ -63,13 +66,13 @@ class AttandanceHistorySerializer(serializers.ModelSerializer):
                  'Lords_Table','Prayer_Meeting','Morning_Revival'
                  'Bible_Reading','Small_Group')
 
-    def create(self, validatedData):
-        """
-        Create and return a new Member instance, given the validated data
-        :param validatedData:
-        :return:'attandance.Member'
-        """
-        return Member.objects.create(**validatedData)
+    # def create(self, validatedData):
+    #     """
+    #     Create and return a new Member instance, given the validated data
+    #     :param validatedData:
+    #     :return:'attandance.Member'
+    #     """
+    #     return Member.objects.create(**validatedData)
 
     def update(self, instance, validated_data):
         """

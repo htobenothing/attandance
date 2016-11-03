@@ -15,8 +15,14 @@
     <link href="{% static 'attandance/css/bootstrap.min.css'  %}" rel="stylesheet">
 
     <!-- Custom CSS -->
-    <link href="{% static 'attandance/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'attandance/css/simple-sidebar.css' %}" rel="stylesheet">
+    <script src="{% static 'attandance/js/jquery-3.1.1.min.js' %}"></script>
+    <script src="{% static 'attandance/js/js.cookie.js' %}"></script>
+    {% block childCss %}
+    {% endblock %}
 
+    {% block childJS %}
+    {% endblock %}
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -35,20 +41,20 @@
             <ul class="sidebar-nav">
                 <li class="sidebar-brand">
                     <a href="#">
-                        Start Bootstrap
+                        <img src="" alt="">
                     </a>
                 </li>
                 <li>
                     <a href="#">Dashboard</a>
                 </li>
                 <li>
-                    <a href="#">Shortcuts</a>
+                    <a href="/attandance/Member">Members</a>
                 </li>
                 <li>
                     <a href="#">Overview</a>
                 </li>
                 <li>
-                    <a href="">attendance</a>
+                    <a href="/attandance/create">Attendance</a>
                 </li>
                 <li>
                     <a href="#">About</a>
